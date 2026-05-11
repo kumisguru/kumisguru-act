@@ -44,7 +44,7 @@ export const MAPEL_SUGGESTIONS = [
 ];
 
 export const DPL_OPTIONS = [
-  { id: "dpl1", label: "DPL 1: Keimanan", short: "Keimanan" },
+  { id: "dpl1", label: "DPL 1: Keimanan dan ketakwaan terhadap Tuhan Yang Maha Esa", short: "Keimanan" },
   { id: "dpl2", label: "DPL 2: Kewargaan", short: "Kewargaan" },
   { id: "dpl3", label: "DPL 3: Penalaran Kritis", short: "Kritis" },
   { id: "dpl4", label: "DPL 4: Kreativitas", short: "Kreativitas" },

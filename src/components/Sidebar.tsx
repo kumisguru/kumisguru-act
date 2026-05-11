@@ -28,6 +28,7 @@ interface SidebarProps {
   onToggleCollapse?: () => void;
   activeSection?: string;
   onScrollToSection?: (sectionId: string) => void;
+  className?: string;
 }
 
 const NAV_ITEMS = [
@@ -39,12 +40,12 @@ const NAV_ITEMS = [
   { id: 'section-6', label: 'Rubrik Pencapaian', icon: Database },
 ];
 
-export default function Sidebar({ history, onSelect, onNew, isLoading, isCollapsed, onToggleCollapse, activeSection, onScrollToSection }: SidebarProps) {
+export default function Sidebar({ history, onSelect, onNew, isLoading, isCollapsed, onToggleCollapse, activeSection, onScrollToSection, className }: SidebarProps) {
   return (
     <motion.aside 
       animate={{ width: isCollapsed ? '80px' : '300px' }}
       transition={{ type: 'spring', damping: 25, stiffness: 120 }}
-      className="bg-slate-900 text-white flex flex-col h-full shadow-2xl z-20 flex-shrink-0 hidden md:flex font-sans relative border-r border-slate-800"
+      className={`bg-slate-900 text-white flex flex-col h-full shadow-2xl z-20 flex-shrink-0 font-sans relative border-r border-slate-800 ${className || ''}`}
     >
       {/* Collapse Toggle Button */}
       <button 

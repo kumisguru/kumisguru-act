@@ -12,7 +12,7 @@ export default function App() {
   const [currentRPP, setCurrentRPP] = useState<RPPData>(DEFAULT_RPP);
   const [showPreview, setShowPreview] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [activeSection, setActiveSection] = useState('section-1');
   const [isLoading, setIsLoading] = useState(true);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
@@ -103,6 +103,7 @@ export default function App() {
         onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         activeSection={activeSection}
         onScrollToSection={scrollToSection}
+        className="hidden md:flex"
       />
 
       {/* Main Content Area */}
@@ -140,7 +141,7 @@ export default function App() {
                 animate={{ x: 0 }}
                 exit={{ x: '-100%' }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed inset-y-0 left-0 w-72 z-50 md:hidden"
+                className="fixed inset-y-0 left-0 z-50 md:hidden"
               >
                 <Sidebar 
                   history={history} 
@@ -149,6 +150,7 @@ export default function App() {
                   isLoading={isLoading} 
                   onScrollToSection={scrollToSection}
                   activeSection={activeSection}
+                  className="w-full h-full"
                 />
               </motion.div>
             </>

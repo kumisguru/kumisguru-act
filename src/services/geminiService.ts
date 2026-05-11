@@ -4,34 +4,50 @@ import { RPPData } from "../types";
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
 
 export async function generateRPPContent(partialData: Partial<RPPData>): Promise<Partial<RPPData>> {
-  const prompt = `Sebagai pakar desain instruksional Kurikulum Merdeka dan Arsitek Pembelajaran Mendalam (Deep Learning), susunlah isi detail Rencana Pelaksanaan Pembelajaran (RPP) yang inovatif.
+  const prompt = `Sebagai pakar desain instruksional Kurikulum Merdeka dan Arsitek Pembelajaran Mendalam (Deep Learning), susunlah isi detail Rencana Pelaksanaan Pembelajaran (RPP) yang inovatif sesuai panduan resmi.
 
-  DATA IDENTITAS:
+  STRUKTUR DOKUMEN YANG WAJIB DIIKUTI:
+  1. IDENTIFIKASI:
+     - Peserta Didik: Identifikasi kesiapan, minat, latar belakang, dan kebutuhan belajar.
+     - Materi Pelajaran: Analisis jenis pengetahuan, relevansi kehidupan nyata, tingkat kesulitan, struktur materi, integrasi nilai/karakter.
+     - DPL (Dimensi Profil Lulusan): Pilih 2-3 ID DPL yang relevan (dpl1-dpl8).
+
+  2. DESAIN PEMBELAJARAN:
+     - Capaian Pembelajaran: Sesuai fase ${partialData.fase}.
+     - Lintas Disiplin Ilmu: Disiplin ilmu/mata pelajaran relevan.
+     - Tujuan Pembelajaran: Kompetensi yang diharapkan (subjek, pengetahuan/sikap/keterampilan, konteks, indikator).
+     - Topik Pembelajaran: Topik utama ${partialData.topik}.
+     - Praktik Pedagogis: Model/Strategi/Metode (PBL, PjBL, Inkuiri, dll).
+     - Kemitraan Pembelajaran: Kerjasama dengan orang tua, komunitas, ahli, atau mitra industri.
+     - Lingkungan Pembelajaran: Integrasi ruang fisik, virtual, dan budaya belajar.
+     - Pemanfaatan Digital: Penggunaan teknologi interaktif dan kolaboratif.
+
+  3. PENGALAMAN BELAJAR (Deep Learning):
+     - AWAL: Pembuka (orientasi, apersepsi, motivasi). Cantumkan prinsip yang digunakan (berkesadaran, bermakna, menggembirakan).
+     - INTI:
+        * Memahami: Eksplorasi konsep (tuliskan prinsip yang digunakan).
+        * Mengaplikasi: Penerapan konsep (tuliskan prinsip yang digunakan).
+        * Merefleksi: Umpan balik & metakognisi (tuliskan prinsip yang digunakan).
+     - PENUTUP: Tahap akhir (umpan balik konstruktif, simpulan, perencanaan bersama). Cantumkan prinsip yang digunakan.
+
+  4. ASESMEN PEMBELAJARAN:
+     - Diagnostik (Awal Pembelajaran).
+     - Formatif (Proses Pembelajaran).
+     - Sumatif (Akhir Pembelajaran).
+
+  5. RUBRIK PENILAIAN:
+     - Indikator ketercapaian.
+     - Level: Baru Memulai, Berkembang, Cakap, Mahir.
+
+  DATA INPUT:
   - Mata Pelajaran: ${partialData.mapel}
   - Fase: ${partialData.fase}
   - Kelas/Semester: ${partialData.kelas}
   - Alokasi Waktu: ${partialData.waktu}
-  - Capaian Pembelajaran: ${partialData.cp}
-  - Topik Pembelajaran: ${partialData.topik}
-  
-  INSTRUKSI KHUSUS PEDAGOGIS:
-  Tugas utama Anda adalah merancang pengalaman belajar yang BERORIENTASI MASA DEPAN dengan menyeimbangkan tiga pilar utama Deep Learning secara proporsional:
-  
-  1. BERKESADARAN (Mindful): Pastikan siswa hadir utuh, merasa aman, dan terlibat secara emosional. Fokus pada fokus diri, empati, dan kehadiran mental.
-  2. BERMAKNA (Meaningful): Hubungkan materi dengan realitas kehidupan, kearifan lokal, atau isu global yang relevan. Siswa harus memahami 'mengapa' mereka mempelajari hal ini.
-  3. MENGGEMBIRAKAN (Joyful): Hadirkan unsur kejutan, tantangan yang menyenangkan, kolaborasi yang hidup, dan apresiasi terhadap proses kreatif.
-  
-  STRUKTUR KEGIATAN INTI:
-  Anda wajib menguraikan kegiatan inti ke dalam 3 tahap (Memahami, Mengaplikasi, Merefleksi). Setiap tahap harus mengandung narasi operasional yang kuat dengan komposisi:
-  - MEMAHAMI: Eksplorasi konsep melalui pemantik rasa ingin tahu dan dialog mendalam yang mindful.
-  - MENGAPLIKASI: Penerapan konsep dalam bentuk proyek kecil, simulasi, atau karya nyata yang bermakna.
-  - MEREFLEKSI: Umpan balik berkelanjutan dan metakognisi yang menggembirakan.
+  - Capaian Pembelajaran (Draft): ${partialData.cp}
+  - Topik: ${partialData.topik}
 
-  PERSYARATAN TEKNIS:
-  - Pilih 2-3 Dimensi Profil Lulusan (DPL) yang paling fungsional untuk topik ini (Gunakan ID: dpl1 s.d dpl8).
-  - Susun Rubrik Penilaian dengan indikator yang terukur dan deskripsi kualitatif yang jelas untuk setiap level (Baru Memulai -> Mahir).
-  - Gunakan bahasa Indonesia yang profesional, inspiratif, namun mudah dipahami oleh guru.
-  - RESPON HARUS SELALU BERUPA JSON VALID SESUAI SKEMA BERIKUT.`;
+  RESPON HARUS SELALU BERUPA JSON VALID SESUAI SKEMA BERIKUT.`;
 
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",

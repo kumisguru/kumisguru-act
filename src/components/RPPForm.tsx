@@ -71,46 +71,8 @@ export default function RPPForm({ initialData, onPreview, onSave }: RPPFormProps
 
   return (
     <form onSubmit={handleSubmit} className="space-y-12 pb-24">
-      {/* Top Header Section */}
-      <div className="glass p-8 rounded-[2.5rem] shadow-elegant flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-        <div className="flex items-center gap-5">
-           <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 shadow-inner">
-             <Layout className="w-6 h-6" />
-           </div>
-           <div>
-            <h2 className="text-xl font-black text-slate-800 tracking-tight">Panel Kontrol Arsitek</h2>
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Kelola dan simulasikan draf RPP Anda.</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => onSave(formData)}
-            className="group flex items-center gap-2 bg-white border-2 border-slate-100 text-slate-600 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:border-slate-200 transition-all active:scale-95 shadow-sm"
-          >
-            <Save className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
-            <span>Simpan Dokumentasi</span>
-          </button>
-          <button
-            type="button"
-            onClick={handleAiFill}
-            disabled={isAiLoading}
-            className="flex items-center gap-2 px-8 py-3 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-all active:scale-95 shadow-lg shadow-indigo-600/20 disabled:opacity-50"
-          >
-            {isAiLoading ? (
-              <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}>
-                <Sparkles className="w-3.5 h-3.5" />
-              </motion.div>
-            ) : (
-              <Sparkles className="w-3.5 h-3.5" />
-            )}
-            Simulasikan AI
-          </button>
-        </div>
-      </div>
-
       {/* 1. Informasi Umum */}
-      <section id="section-1" className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-elegant border-t-[6px] border-indigo-600 relative overflow-hidden">
+      <section id="section-1" className="bg-white p-4 md:p-12 rounded-[1.5rem] md:rounded-[2.5rem] shadow-elegant border-t-[6px] border-indigo-600 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-12 opacity-[0.03] rotate-12">
           <Info className="w-64 h-64 text-indigo-600" />
         </div>
@@ -261,7 +223,7 @@ export default function RPPForm({ initialData, onPreview, onSave }: RPPFormProps
       </section>
 
       {/* 2. Identifikasi */}
-      <section id="section-2" className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-elegant">
+      <section id="section-2" className="bg-white p-4 md:p-12 rounded-[1.5rem] md:rounded-[2.5rem] shadow-elegant">
         <div className="flex items-center gap-4 mb-10">
           <div className="w-12 h-12 bg-slate-100 text-slate-800 rounded-2xl flex items-center justify-center font-black text-lg">2</div>
           <div>
@@ -321,7 +283,7 @@ export default function RPPForm({ initialData, onPreview, onSave }: RPPFormProps
       </section>
 
       {/* 3. Desain Pembelajaran */}
-      <section id="section-3" className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-elegant">
+      <section id="section-3" className="bg-white p-4 md:p-12 rounded-[1.5rem] md:rounded-[2.5rem] shadow-elegant">
         <div className="flex items-center gap-4 mb-10">
           <div className="w-12 h-12 bg-slate-100 text-slate-800 rounded-2xl flex items-center justify-center font-black text-lg">3</div>
           <div>
@@ -359,7 +321,7 @@ export default function RPPForm({ initialData, onPreview, onSave }: RPPFormProps
       </section>
 
       {/* 4. Pengalaman Belajar */}
-      <section id="section-4" className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-elegant relative">
+      <section id="section-4" className="bg-white p-4 md:p-12 rounded-[1.5rem] md:rounded-[2.5rem] shadow-elegant relative">
         <div className="flex items-center gap-4 mb-12">
           <div className="w-12 h-12 bg-indigo-600 text-white rounded-2xl flex items-center justify-center font-black text-lg shadow-lg shadow-indigo-600/20">4</div>
           <div>
@@ -417,7 +379,7 @@ export default function RPPForm({ initialData, onPreview, onSave }: RPPFormProps
       </section>
 
       {/* 5. Asesmen */}
-      <section id="section-5" className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-elegant border-b-8 border-slate-900">
+      <section id="section-5" className="bg-white p-4 md:p-12 rounded-[1.5rem] md:rounded-[2.5rem] shadow-elegant border-b-8 border-slate-900">
         <div className="flex items-center gap-4 mb-12">
           <div className="w-12 h-12 bg-slate-900 text-white rounded-2xl flex items-center justify-center font-black text-lg">5</div>
           <div>
@@ -452,7 +414,7 @@ export default function RPPForm({ initialData, onPreview, onSave }: RPPFormProps
       </section>
 
       {/* 6. Rubrik Penilaian */}
-      <section id="section-6" className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-elegant overflow-hidden">
+      <section id="section-6" className="bg-white p-4 md:p-12 rounded-[1.5rem] md:rounded-[2.5rem] shadow-elegant overflow-hidden">
         <div className="flex items-center gap-4 mb-12">
           <div className="w-12 h-12 bg-emerald-100 text-emerald-800 rounded-2xl flex items-center justify-center font-black text-lg">6</div>
           <div>
@@ -545,6 +507,41 @@ export default function RPPForm({ initialData, onPreview, onSave }: RPPFormProps
           <Layout className="w-8 h-8" />
           Konstruksi & Tampilkan RPP
         </button>
+      </div>
+
+      {/* Floating Action Bar */}
+      <div className="fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-4 sm:px-6">
+        <div className="bg-slate-900/90 backdrop-blur-xl p-4 rounded-[2rem] shadow-2xl flex items-center justify-between border border-white/10">
+          <div className="flex items-center gap-4 px-4 border-r border-white/10 mr-4">
+             <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white">
+               <Layout className="w-5 h-5" />
+             </div>
+             <div className="hidden sm:block">
+               <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Penyusun</p>
+               <p className="text-xs font-bold text-white truncate max-w-[120px]">{formData.nama || "Tanpa Nama"}</p>
+             </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleAiFill}
+              disabled={isAiLoading}
+              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              {isAiLoading ? "Diproses..." : "Simulasikan AI"}
+            </button>
+            <button
+              type="button"
+              onClick={() => onSave(formData)}
+              className="flex items-center gap-2 bg-white text-slate-900 px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-100 transition-all active:scale-95 shadow-lg"
+            >
+              <Save className="w-3.5 h-3.5" />
+              Simpan
+            </button>
+          </div>
+        </div>
       </div>
     </form>
   );

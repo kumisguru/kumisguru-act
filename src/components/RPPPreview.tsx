@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   FileDown, 
@@ -42,7 +42,41 @@ export default function RPPPreview({ data }: RPPPreviewProps) {
   const handleExportWord = () => {
     if (!contentRef.current) return;
     const html = contentRef.current.innerHTML;
-    const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>RPP Export</title><style>table { border-collapse: collapse; width: 100%; font-family: Arial; font-size: 11pt; } td, th { border: 1px solid black; padding: 8px; }</style></head><body>";
+    // Enhanced styles for Word
+    const style = `
+      <style>
+        @page { size: A4; margin: 2cm; }
+        body { font-family: "Times New Roman", serif; font-size: 11pt; color: #000; }
+        table { border-collapse: collapse; width: 100%; border: 1pt solid black; margin-bottom: 20px; }
+        td, th { border: 1pt solid black; padding: 8px; vertical-align: top; }
+        .border-none { border: none !important; }
+        .p-0 { padding: 0 !important; }
+        .p-1 { padding: 4px !important; }
+        .p-4 { padding: 16px !important; }
+        .font-bold { font-weight: bold; }
+        .font-black { font-weight: 900; }
+        .uppercase { text-transform: uppercase; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-xs { font-size: 8pt; }
+        .text-sm { font-size: 10pt; }
+        .bg-slate-50 { background-color: #f1f5f9; }
+        .bg-black { background-color: #000000; }
+        .w-full { width: 100%; }
+        .w-1/2 { width: 50%; }
+        .italic { font-style: italic; }
+        .whitespace-pre-wrap { white-space: pre-wrap; }
+        .flex { display: flex; }
+        .items-start { align-items: flex-start; }
+        .gap-2 { gap: 8px; }
+        .w-3\\.5 { width: 14px; }
+        .h-3\\.5 { height: 14px; }
+        .border { border: 1pt solid black; }
+        .flex-shrink-0 { flex-shrink: 0; }
+        .mt-1 { margin-top: 4px; }
+      </style>
+    `;
+    const header = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>RPP Export</title>${style}</head><body>`;
     const footer = "</body></html>";
     const fullHtml = header + html + footer;
     const blob = new Blob(['\ufeff', fullHtml], { type: 'application/msword' });
@@ -71,284 +105,290 @@ export default function RPPPreview({ data }: RPPPreviewProps) {
             <FileCheck className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-black text-slate-900 tracking-tight">Dokumen Terkonstruksi</h2>
-            <p className="text-sm font-medium text-slate-500">Pratinjau akhir sebelum dibagikan atau dicetak.</p>
+            <h2 className="text-2xl font-black text-slate-900 tracking-tight">Dokumen Terkonsolidasi</h2>
+            <p className="text-sm font-medium text-slate-500">Pratinjau akhir sesuai panduan resmi pembelajaran mendalam.</p>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-2 md:gap-4">
           <button
             onClick={handleCopy}
-            className="flex items-center gap-3 bg-white hover:bg-slate-50 text-slate-800 px-6 py-4 rounded-2xl font-bold transition-all shadow-elegant active:scale-95 border border-slate-100"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold transition-all shadow-elegant active:scale-95 border border-slate-100 text-xs sm:text-base"
           >
-            <Copy className="w-5 h-5 text-indigo-600" />
-            <span className="hidden sm:inline">Salin Konten</span>
+            <Copy className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600" />
+            <span>Salin</span>
           </button>
           <button
             onClick={handleExportWord}
-            className="flex items-center gap-3 bg-white hover:bg-slate-50 text-slate-800 px-6 py-4 rounded-2xl font-bold transition-all shadow-elegant active:scale-95 border border-slate-100"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold transition-all shadow-elegant active:scale-95 border border-slate-100 text-xs sm:text-base"
           >
-            <FileText className="w-5 h-5 text-blue-600" />
-            <span className="hidden sm:inline">Word Doc</span>
-          </button>
-          <button
-            onClick={() => window.print()}
-            className="flex items-center gap-3 bg-slate-900 hover:bg-black text-white px-8 py-4 rounded-2xl font-bold transition-all shadow-2xl active:scale-95 translate-y-[-2px]"
-          >
-            <Printer className="w-5 h-5" />
-            <span>Cetak PDF</span>
+            <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+            <span>Word</span>
           </button>
         </div>
       </div>
 
-      <div className="bg-white p-1 md:p-1 shadow-elegant rounded-[3.5rem] border border-slate-100 overflow-hidden">
-        <div className="bg-slate-50/50 p-6 md:p-12 overflow-x-auto custom-scrollbar">
+      <div className="bg-white p-1 shadow-elegant rounded-[2rem] md:rounded-[3.5rem] border border-slate-100 overflow-hidden">
+        <div className="bg-[#f8fafc] p-2 md:p-12 overflow-x-auto custom-scrollbar">
           <div 
             ref={contentRef}
-            className="bg-white p-12 md:p-20 shadow-2xl rounded-2xl min-w-[800px] max-w-[950px] mx-auto text-slate-900 print:p-0 print:shadow-none font-serif relative"
-            style={{ lineHeight: '1.7' }}
+            className="bg-white p-6 md:p-20 shadow-2xl rounded-2xl min-w-[800px] max-w-[950px] mx-auto text-slate-900 print:p-0 print:shadow-none font-serif relative"
+            style={{ lineHeight: '1.6' }}
           >
             {/* Watermark/Accent */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50/30 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#f1f5f9] rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none print:hidden" />
 
             {/* HEADER DOKUMEN */}
-            <div className="text-center mb-16 border-b-4 border-slate-900 pb-10 relative">
-              <h1 className="text-2xl font-black uppercase tracking-tight mb-2">PERENCANAAN PEMBELAJARAN MENDALAM</h1>
-              <h2 className="text-xl font-bold text-slate-600 uppercase tracking-[0.2em] mb-6">(DEEP LEARNING ARCHITECT)</h2>
-              <div className="inline-flex items-center gap-3 bg-indigo-50 px-6 py-2 rounded-full">
-                <div className="w-2 h-2 bg-indigo-600 rounded-full animate-pulse" />
-                <p className="text-[10pt] font-black italic text-indigo-600 uppercase tracking-widest">Berorientasi pada Dimensi Profil Lulusan</p>
-                <div className="w-2 h-2 bg-indigo-600 rounded-full animate-pulse" />
-              </div>
-            </div>
-
-            {/* TABEL INFORMASI UMUM */}
-            <div className="mb-14">
-              <div className="inline-flex items-center gap-2 mb-6 text-indigo-600">
-                <Sparkles className="w-4 h-4" />
-                <span className="text-xs font-black uppercase tracking-[0.3em]">Identitas Pendidik & Satuan</span>
-              </div>
-              <table className="w-full border-2 border-slate-900 border-collapse">
+            <div className="mb-10">
+              <h1 className="text-xl font-bold mb-8">PERENCANAAN PEMBELAJARAN MENDALAM</h1>
+              <table className="w-full border-none mb-10 text-sm">
                 <tbody>
-                  <tr className="border-b-2 border-slate-900">
-                    <td className="w-1/3 p-5 font-black bg-slate-50 border-r-2 border-slate-900 uppercase text-[10pt]">Nama Penyusun</td>
-                    <td className="p-5 font-bold uppercase tracking-tight">{data.nama}</td>
-                  </tr>
-                  <tr className="border-b-2 border-slate-900">
-                    <td className="p-5 font-black bg-slate-50 border-r-2 border-slate-900 uppercase text-[10pt]">Satuan Pendidikan</td>
-                    <td className="p-5 font-bold">{data.satuan}</td>
-                  </tr>
-                  <tr className="border-b-2 border-slate-900">
-                    <td className="p-5 font-black bg-slate-50 border-r-2 border-slate-900 uppercase text-[10pt]">Mata Pelajaran</td>
-                    <td className="p-5 font-bold">{data.mapel}</td>
-                  </tr>
-                  <tr className="border-b-2 border-slate-900">
-                    <td className="p-5 font-black bg-slate-50 border-r-2 border-slate-900 uppercase text-[10pt]">Fase / Kelas / Semester</td>
-                    <td className="p-5 font-bold">{data.fase} / {data.kelas}</td>
+                  <tr>
+                    <td className="p-1 border-none font-bold w-[250px]">NAMA PENYUSUN</td>
+                    <td className="p-1 border-none font-black uppercase tracking-tight">: {data.nama}</td>
                   </tr>
                   <tr>
-                    <td className="p-5 font-black bg-slate-50 border-r-2 border-slate-900 uppercase text-[10pt]">Alokasi Waktu</td>
-                    <td className="p-5 font-bold">{data.waktu}</td>
+                    <td className="p-1 border-none font-bold">SATUAN PENDIDIKAN</td>
+                    <td className="p-1 border-none">: {data.satuan}</td>
+                  </tr>
+                  <tr>
+                    <td className="p-1 border-none font-bold">MATA PELAJARAN</td>
+                    <td className="p-1 border-none">: {data.mapel}</td>
+                  </tr>
+                  <tr>
+                    <td className="p-1 border-none font-bold">FASE</td>
+                    <td className="p-1 border-none font-bold">: {data.fase}</td>
+                  </tr>
+                  <tr>
+                    <td className="p-1 border-none font-bold">KELAS / SEMESTER</td>
+                    <td className="p-1 border-none font-bold">: {data.kelas}</td>
+                  </tr>
+                  <tr>
+                    <td className="p-1 border-none font-bold">ALOKASI WAKTU</td>
+                    <td className="p-1 border-none">: {data.waktu}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
-            {/* TABEL STRUKTUR RPP */}
-            <div className="space-y-14">
-              {/* SEKSI IDENTIFIKASI */}
-              <div>
-                <h3 className="text-sm font-black uppercase tracking-widest mb-4 bg-slate-900 text-white inline-block px-4 py-1">I. Tahap Identifikasi</h3>
-                <table className="w-full border-2 border-slate-900 border-collapse">
-                  <tbody>
-                    <tr className="border-b-2 border-slate-900">
-                      <td className="w-1/3 p-5 font-black bg-slate-50 border-r-2 border-slate-900 text-[10pt]">Pesan Utama & Karakteristik</td>
-                      <td className="p-5 whitespace-pre-wrap leading-relaxed">{data.pesertaDidik}</td>
-                    </tr>
-                    <tr className="border-b-2 border-slate-900">
-                      <td className="p-5 font-black bg-slate-50 border-r-2 border-slate-900 text-[10pt]">Materi Pelajaran</td>
-                      <td className="p-5 whitespace-pre-wrap leading-relaxed">{data.materi}</td>
-                    </tr>
-                    <tr>
-                      <td className="p-5 font-black bg-slate-50 border-r-2 border-slate-900 text-[10pt]">Hattrick DPL</td>
-                      <td className="p-5">
-                        <div className="flex flex-wrap gap-2">
-                          {getDplLabels().map((label, i) => (
-                            <span key={i} className="bg-indigo-50 border border-indigo-200 text-indigo-700 px-3 py-1 rounded-lg text-xs font-black uppercase">
-                              {label}
-                            </span>
-                          ))}
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+            {/* MAIN DATA TABLE */}
+            <table className="w-full border-collapse border border-black text-[10pt] mb-10">
+              <tbody>
+                {/* IDENTIFIKASI */}
+                <tr>
+                  <td rowSpan={4} className="border border-black p-4 font-bold bg-slate-50 uppercase text-center w-[120px] align-middle">IDENTIFIKASI</td>
+                  <td className="border border-black p-4 font-bold w-[220px]">Peserta Didik</td>
+                  <td className="border border-black p-4 italic text-slate-600">{data.pesertaDidik}</td>
+                </tr>
+                <tr>
+                  <td className="border border-black p-4 font-bold">Materi Pelajaran</td>
+                  <td className="border border-black p-4 whitespace-pre-wrap">{data.materi}</td>
+                </tr>
+                <tr>
+                  <td className="border border-black p-4 font-bold">Dimensi Profil Lulusan (DPL)</td>
+                  <td className="border border-black p-4 text-xs italic">Pilihlah dimensi profil lulusan yang akan dicapai dalam pembelajaran</td>
+                </tr>
+                <tr>
+                  <td colSpan={2} className="border border-black p-4">
+                    <table className="w-full border-none text-[10pt]">
+                      <tbody>
+                        {DPL_OPTIONS.filter(opt => data.dpl.includes(opt.id)).reduce((acc: any[][], opt, i) => {
+                          if (i % 2 === 0) acc.push([opt]);
+                          else acc[acc.length - 1].push(opt);
+                          return acc;
+                        }, []).map((row, rowIdx) => (
+                          <tr key={rowIdx}>
+                            {row.map(opt => (
+                              <td key={opt.id} className="p-1 border-none w-1/2">
+                                <div className="flex items-start gap-2">
+                                  <div className="w-3.5 h-3.5 border border-black bg-black flex-shrink-0 mt-1" />
+                                  <div className="leading-tight">
+                                    <div className="font-bold text-[8.5pt] uppercase">{opt.id}</div>
+                                    <div className="text-[7.5pt] text-slate-700">{opt.label.split(': ')[1]}</div>
+                                  </div>
+                                </div>
+                              </td>
+                            ))}
+                            {row.length === 1 && <td className="p-2 border-none w-1/2"></td>}
+                          </tr>
+                        ))}
+                        {data.dpl.length === 0 && (
+                          <tr>
+                            <td className="p-2 border-none italic text-slate-400">Tidak ada dimensi yang dipilih</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
 
-              {/* SEKSI DESAIN PEMBELAJARAN */}
-              <div>
-                <h3 className="text-sm font-black uppercase tracking-widest mb-4 bg-slate-900 text-white inline-block px-4 py-1">II. Desain Pembelajaran</h3>
-                <table className="w-full border-2 border-slate-900 border-collapse">
-                  <tbody>
-                    <tr className="border-b-2 border-slate-900">
-                      <td className="w-1/3 p-5 font-black bg-slate-50 border-r-2 border-slate-900 text-[10pt]">Capaian Pembelajaran (CP)</td>
-                      <td className="p-5 italic leading-relaxed text-slate-600">{data.cp}</td>
-                    </tr>
-                    <tr className="border-b-2 border-slate-900">
-                      <td className="p-5 font-black bg-slate-50 border-r-2 border-slate-900 text-[10pt]">Lingkup Disiplin Ilmu</td>
-                      <td className="p-5">{data.lintasDisiplin}</td>
-                    </tr>
-                    <tr className="border-b-2 border-slate-900 bg-indigo-50/30">
-                      <td className="p-5 font-black border-r-2 border-slate-900 text-indigo-700 text-[10pt]">Tujuan Pembelajaran Khusus</td>
-                      <td className="p-5 font-black text-indigo-900 leading-snug">{data.tujuan}</td>
-                    </tr>
-                    <tr className="border-b-2 border-slate-900">
-                      <td className="p-5 font-black bg-slate-50 border-r-2 border-slate-900 text-[10pt]">Topik & Fokus Utama</td>
-                      <td className="p-5 font-bold">{data.topik}</td>
-                    </tr>
-                    <tr className="border-b-2 border-slate-900">
-                      <td className="p-5 font-black bg-slate-50 border-r-2 border-slate-900 text-[10pt]">Strategi Pedagogis</td>
-                      <td className="p-5">{data.pedagogis}</td>
-                    </tr>
-                    <tr className="border-b-2 border-slate-900">
-                      <td className="p-5 font-black bg-slate-50 border-r-2 border-slate-900 text-[10pt]">Ekosistem Pembelajaran</td>
-                      <td className="p-5">{data.lingkungan}</td>
-                    </tr>
-                    <tr className="border-b-2 border-slate-900">
-                      <td className="p-5 font-black bg-slate-50 border-r-2 border-slate-900 text-[10pt]">Kemitraan Komunitas</td>
-                      <td className="p-5">{data.kemitraan}</td>
-                    </tr>
-                    <tr>
-                      <td className="p-5 font-black bg-slate-50 border-r-2 border-slate-900 text-[10pt]">Akselerasi Digital</td>
-                      <td className="p-5 font-mono text-emerald-700 bg-emerald-50/30">{data.digital}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                {/* DESAIN PEMBELAJARAN */}
+                <tr>
+                  <td rowSpan={8} className="border border-black p-4 font-bold bg-slate-50 uppercase text-center align-middle">DESAIN PEMBELAJARAN</td>
+                  <td className="border border-black p-4 font-bold">Capaian Pembelajaran</td>
+                  <td className="border border-black p-4 italic text-slate-600">{data.cp}</td>
+                </tr>
+                <tr>
+                  <td className="border border-black p-4 font-bold">Lintas Disiplin Ilmu</td>
+                  <td className="border border-black p-4">{data.lintasDisiplin}</td>
+                </tr>
+                <tr>
+                  <td className="border border-black p-4 font-bold">Tujuan Pembelajaran</td>
+                  <td className="border border-black p-4 font-bold">{data.tujuan}</td>
+                </tr>
+                <tr>
+                  <td className="border border-black p-4 font-bold">Topik Pembelajaran</td>
+                  <td className="border border-black p-4 font-bold">{data.topik}</td>
+                </tr>
+                <tr>
+                  <td className="border border-black p-4 font-bold">Praktik Pedagogis</td>
+                  <td className="border border-black p-4">{data.pedagogis}</td>
+                </tr>
+                <tr>
+                  <td className="border border-black p-4 font-bold">Kemitraan Pembelajaran</td>
+                  <td className="border border-black p-4">{data.kemitraan}</td>
+                </tr>
+                <tr>
+                  <td className="border border-black p-4 font-bold">Lingkungan Pembelajaran</td>
+                  <td className="border border-black p-4">{data.lingkungan}</td>
+                </tr>
+                <tr>
+                  <td className="border border-black p-4 font-bold">Pemanfaatan Digital</td>
+                  <td className="border border-black p-4">{data.digital}</td>
+                </tr>
 
-              {/* SEKSI PENGALAMAN BELAJAR */}
-              <div>
-                <h3 className="text-sm font-black uppercase tracking-widest mb-6 bg-slate-900 text-white inline-block px-4 py-1">III. Pengalaman Belajar (Deep Learning)</h3>
-                <div className="space-y-6">
-                  <div className="border-2 border-slate-900 p-8 rounded-3xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-4 opacity-[0.05]">
-                       <RotateCcw className="w-16 h-16" />
-                    </div>
-                    <p className="text-[10pt] font-black uppercase text-indigo-600 mb-4 tracking-widest">A. Kegiatan Awal (Koneksi & Kebutuhan)</p>
-                    <div className="text-[11pt] leading-relaxed whitespace-pre-wrap">{data.awal}</div>
-                  </div>
-                  
-                  <div className="border-2 border-slate-900 overflow-hidden rounded-[2rem]">
-                    <div className="bg-slate-900 text-white p-5 border-b-2 border-slate-900">
-                      <p className="text-[11pt] font-black uppercase tracking-[0.2em] text-center">B. Konstruksi Inti (Deep Exploration)</p>
-                    </div>
-                    <div className="divide-y-2 divide-slate-900">
-                      <div className="p-10 relative">
-                        <div className="absolute top-10 right-10 text-[60pt] font-black text-slate-100 -z-10 leading-none">01</div>
-                        <p className="text-[10pt] font-black text-indigo-600 uppercase mb-4 flex items-center gap-3">
-                          <Zap className="w-5 h-5" />
-                          Memahami (Eksplorasi Konsep)
-                        </p>
-                        <div className="text-[11pt] leading-relaxed whitespace-pre-wrap relative z-10">{data.intiMemahami}</div>
-                      </div>
-                      <div className="p-10 relative bg-slate-50/50">
-                        <div className="absolute top-10 right-10 text-[60pt] font-black text-slate-100 -z-10 leading-none">02</div>
-                        <p className="text-[10pt] font-black text-indigo-600 uppercase mb-4 flex items-center gap-3">
-                          <Activity className="w-5 h-5" />
-                          Mengaplikasi (Penerapan Kreatif)
-                        </p>
-                        <div className="text-[11pt] leading-relaxed whitespace-pre-wrap relative z-10">{data.intiMengaplikasi}</div>
-                      </div>
-                      <div className="p-10 relative">
-                        <div className="absolute top-10 right-10 text-[60pt] font-black text-slate-100 -z-10 leading-none">03</div>
-                        <p className="text-[10pt] font-black text-indigo-600 uppercase mb-4 flex items-center gap-3">
-                          <CheckCircle2 className="w-5 h-5" />
-                          Merefleksi (Umpan Balik & Evaluasi)
-                        </p>
-                        <div className="text-[11pt] leading-relaxed whitespace-pre-wrap relative z-10">{data.intiMerefleksi}</div>
-                      </div>
-                    </div>
-                  </div>
+                {/* PENGALAMAN BELAJAR */}
+                <tr>
+                  <td rowSpan={6} className="border border-black p-4 font-bold bg-slate-50 uppercase text-center align-middle">PENGALAMAN BELAJAR</td>
+                  <td colSpan={2} className="border border-black p-3 bg-slate-50 font-bold text-xs uppercase tracking-tight">AWAL (tuliskan prinsip pembelajaran yang digunakan, misal berkesadaran, bermakna, menggembirakan)</td>
+                </tr>
+                <tr>
+                  <td colSpan={2} className="border border-black p-5 whitespace-pre-wrap">{data.awal}</td>
+                </tr>
+                <tr>
+                  <td colSpan={2} className="border border-black p-3 bg-slate-50 font-bold uppercase text-xs tracking-tight">INTI</td>
+                </tr>
+                <tr>
+                  <td colSpan={2} className="border border-black p-5 font-medium text-[9pt] italic leading-relaxed">
+                    Pada tahap ini, siswa aktif terlibat dalam pengalaman belajar memahami, mengaplikasi, dan merefleksi. Guru menerapkan prinsip pembelajaran berkesadaran, bermakna, menyenangkan untuk mencapai tujuan pembelajaran. Pengalaman belajar tidak harus dilaksanakan dalam satu kali pertemuan.
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={2} className="border border-black p-0">
+                    <table className="w-full border-collapse border-none">
+                      <tbody>
+                        <tr>
+                          <td className="p-5 border-r border-b border-black font-bold w-[340px] text-xs">Memahami (tuliskan prinsip pembelajaran yang digunakan, misal berkesadaran, bermakna, menggembirakan)</td>
+                          <td className="p-5 border-b border-black whitespace-pre-wrap">{data.intiMemahami}</td>
+                        </tr>
+                        <tr>
+                          <td className="p-5 border-r border-b border-black font-bold text-xs">Mengaplikasi (tuliskan prinsip pembelajaran yang digunakan, misal berkesadaran, bermakna, menggembirakan)</td>
+                          <td className="p-5 border-b border-black whitespace-pre-wrap">{data.intiMengaplikasi}</td>
+                        </tr>
+                        <tr>
+                          <td className="p-5 border-r border-black font-bold text-xs">Merefleksi (tuliskan prinsip pembelajaran yang digunakan, misal berkesadaran, bermakna, menggembirakan)</td>
+                          <td className="p-5 whitespace-pre-wrap">{data.intiMerefleksi}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={2} className="border border-black p-0">
+                    <table className="w-full border-collapse border-none">
+                      <tbody>
+                        <tr>
+                          <td className="p-3 border-t border-b border-black bg-slate-50 font-bold text-xs uppercase tracking-tight">PENUTUP (tuliskan prinsip pembelajaran yang digunakan, misal berkesadaran, bermakna, menggembirakan)</td>
+                        </tr>
+                        <tr>
+                          <td className="p-5 whitespace-pre-wrap">{data.penutup}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
 
-                  <div className="border-2 border-slate-900 p-8 rounded-3xl relative overflow-hidden bg-slate-50/30">
-                    <p className="text-[10pt] font-black uppercase text-indigo-600 mb-4 tracking-widest">C. Kegiatan Penutup (Sintesis & Transfer)</p>
-                    <div className="text-[11pt] leading-relaxed whitespace-pre-wrap">{data.penutup}</div>
-                  </div>
-                </div>
-              </div>
+                {/* ASESMEN PEMBELAJARAN */}
+                <tr>
+                  <td rowSpan={4} className="border border-black p-4 font-bold bg-slate-50 uppercase text-center align-middle">ASESMEN PEMBELAJARAN</td>
+                  <td className="border border-black p-4 font-bold">Asesmen pada Awal Pembelajaran</td>
+                  <td className="border border-black p-4 whitespace-pre-wrap">{data.asesmenAwal}</td>
+                </tr>
+                <tr>
+                  <td className="border border-black p-4 font-bold">Asesmen pada Proses Pembelajaran</td>
+                  <td className="border border-black p-4 whitespace-pre-wrap">{data.asesmenProses}</td>
+                </tr>
+                <tr>
+                  <td className="border border-black p-4 font-bold">Asesmen pada Akhir Pembelajaran</td>
+                  <td className="border border-black p-4 whitespace-pre-wrap">{data.asesmenAkhir}</td>
+                </tr>
+                <tr>
+                  <td colSpan={2} className="border border-black p-4 text-[8pt] italic text-slate-500 bg-[#f8fafc]">
+                    Asesmen dalam pembelajaran mendalam disesuaikan dengan assessment as learning, assessment for learning, dan assessment of learning. Tentukan metode atau cara yang digunakan secara komprehensif untuk mengukur pencapaian kompetensi peserta didik. Contoh: Tes tertulis, Tes lisan, Penilaian Kinerja, Penilaian Proyek, Penilaian Produk, Observasi, Portofolio, Peer Assessment, Self Assessment, penilaian berbasis kelas, dan sebagainya.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-              {/* SEKSI ASESMEN */}
-              <div>
-                <h3 className="text-sm font-black uppercase tracking-widest mb-4 bg-slate-900 text-white inline-block px-4 py-1">IV. Penilaian & Evaluasi</h3>
-                <table className="w-full border-2 border-slate-900 border-collapse">
-                  <tbody>
-                    <tr className="border-b-2 border-slate-900 text-center uppercase text-[8pt] font-black bg-slate-100">
-                      <td className="w-1/3 p-3 border-r-2 border-slate-900">Diagnostik (Awal)</td>
-                      <td className="w-1/3 p-3 border-r-2 border-slate-900">Formatif (Proses)</td>
-                      <td className="w-1/3 p-3">Sumatif (Akhir)</td>
+            {/* RUBRIK PENILAIAN */}
+            <div className="mt-20">
+              <h3 className="text-[12pt] font-black uppercase mb-3 text-indigo-700">RUBRIK PENILAIAN DISKUSI KELAS</h3>
+              <p className="text-[10pt] font-bold mb-6 italic text-slate-600">Tujuan Pembelajaran: {data.tujuanRubrik || data.tujuan}</p>
+              
+              <table className="w-full border-collapse border border-black text-[9pt]">
+                <thead>
+                  <tr className="bg-slate-50">
+                    <th className="border border-black p-4 text-left font-bold w-1/5 bg-[#eef2ff]">Indikator</th>
+                    <th className="border border-black p-4 text-center font-bold w-1/5">Baru Memulai</th>
+                    <th className="border border-black p-4 text-center font-bold w-1/5">Berkembang</th>
+                    <th className="border border-black p-4 text-center font-bold w-1/5">Cakap</th>
+                    <th className="border border-black p-4 text-center font-bold w-1/5">Mahir</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.rubrik.map((row, i) => (
+                    <tr key={i}>
+                      <td className="border border-black p-4 align-top font-bold bg-[#f1f5f9]">{row.indikator}</td>
+                      <td className="border border-black p-4 align-top leading-tight text-slate-700">{row.baruMemulai}</td>
+                      <td className="border border-black p-4 align-top leading-tight text-slate-700">{row.berkembang}</td>
+                      <td className="border border-black p-4 align-top leading-tight text-slate-700">{row.cakap}</td>
+                      <td className="border border-black p-4 align-top leading-tight text-slate-700">{row.mahir}</td>
                     </tr>
-                    <tr className="align-top">
-                      <td className="p-5 border-r-2 border-slate-900 whitespace-pre-wrap text-[10pt]">{data.asesmenAwal}</td>
-                      <td className="p-5 border-r-2 border-slate-900 whitespace-pre-wrap text-[10pt]">{data.asesmenProses}</td>
-                      <td className="p-5 whitespace-pre-wrap text-[10pt]">{data.asesmenAkhir}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              {/* RUBRIK PENILAIAN */}
-              <div className="mt-12 page-break">
-                <div className="text-center mb-10">
-                  <h3 className="text-[13pt] font-black mb-1 uppercase tracking-tight">{data.judulRubrik || "Matriks Ketercapaian Pembelajaran"}</h3>
-                  <div className="h-1 w-24 bg-slate-900 mx-auto mb-3" />
-                  <p className="text-[10pt] italic font-medium text-slate-500">Tujuan: {data.tujuanRubrik || data.tujuan}</p>
-                </div>
-                
-                <table className="w-full border-2 border-slate-900 border-collapse">
-                  <thead>
-                    <tr className="bg-slate-900 text-white">
-                      <th className="border-2 border-slate-900 p-4 text-left font-black uppercase tracking-widest text-[8pt] w-1/5">Indikator</th>
-                      <th className="border-2 border-slate-900 p-4 text-center font-black uppercase tracking-widest text-[8pt] w-1/5 bg-rose-600/20">Baru Memulai</th>
-                      <th className="border-2 border-slate-900 p-4 text-center font-black uppercase tracking-widest text-[8pt] w-1/5 bg-amber-600/20">Berkembang</th>
-                      <th className="border-2 border-slate-900 p-4 text-center font-black uppercase tracking-widest text-[8pt] w-1/5 bg-emerald-600/20">Cakap</th>
-                      <th className="border-2 border-slate-900 p-4 text-center font-black uppercase tracking-widest text-[8pt] w-1/5 bg-indigo-600/20">Mahir</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.rubrik.map((row, i) => (
-                      <tr key={i}>
-                        <td className="border-2 border-slate-900 p-5 align-top font-black bg-slate-50 text-[10pt]">{row.indikator}</td>
-                        <td className="border-2 border-slate-900 p-5 align-top text-[9pt] leading-tight text-slate-700">{row.baruMemulai}</td>
-                        <td className="border-2 border-slate-900 p-5 align-top text-[9pt] leading-tight text-slate-700">{row.berkembang}</td>
-                        <td className="border-2 border-slate-900 p-5 align-top text-[9pt] leading-tight text-slate-700">{row.cakap}</td>
-                        <td className="border-2 border-slate-900 p-5 align-top text-[9pt] leading-tight text-slate-700">{row.mahir}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                  ))}
+                </tbody>
+              </table>
+              <div className="mt-6 text-[8pt] space-y-1 font-medium bg-[#f8fafc] p-4 rounded-xl border border-dotted border-slate-300">
+                <p className="font-bold underline mb-2">Keterangan:</p>
+                <p>● <span className="font-bold">Baru Memulai</span>: Peserta didik menunjukkan pemahaman dan keterampilan yang sangat dasar.</p>
+                <p>● <span className="font-bold">Berkembang</span>: Peserta didik menunjukkan pemahaman dan keterampilan yang sedang berkembang, tetapi masih perlu perbaikan.</p>
+                <p>● <span className="font-bold">Cakap</span>: Peserta didik menunjukkan pemahaman dan keterampilan yang baik, sesuai dengan harapan.</p>
+                <p>● <span className="font-bold">Mahir</span>: Peserta didik menunjukkan pemahaman dan keterampilan yang sangat baik, melebihi harapan.</p>
               </div>
             </div>
 
             {/* TANDA TANGAN */}
-            <div className="mt-24 flex justify-between items-start text-[11pt] px-8 border-t-2 border-slate-100 pt-16">
-              <div className="text-center w-64 group">
-                <p className="font-bold mb-1">Mengesahkan,</p>
-                <p className="text-sm font-black uppercase text-slate-400 mb-1">Kepala Sekolah</p>
-                <div className="h-32" />
-                <div className="w-full h-px bg-slate-900 mb-1" />
-                <p className="font-black">NIP.</p>
-              </div>
-              <div className="text-center w-72 group">
-                <p className="mb-1">Purbalingga, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                <p className="text-sm font-black uppercase text-indigo-600 mb-1">Guru Kelas / Mata Pelajaran</p>
-                <div className="h-32 flex flex-col justify-end items-center italic text-slate-300 text-xs pb-4">
-                   <span>Digital Signature Space</span>
-                </div>
-                <div className="w-full h-px bg-indigo-600 mb-1" />
-                <p className="font-black text-indigo-700 underline decoration-indigo-600 decoration-2 underline-offset-4">{data.nama}</p>
-                <p className="text-sm font-bold">NIP.</p>
-              </div>
-            </div>
+            <table className="w-full border-none mt-24 text-[11pt]">
+              <tbody>
+                <tr>
+                  <td className="border-none w-1/2 align-top text-center px-4">
+                    <p className="font-bold mb-1 text-slate-900">Mengesahkan,</p>
+                    <p className="text-[10pt] font-black uppercase text-slate-400 mb-10">Kepala Sekolah</p>
+                    <div className="h-20" />
+                    <div className="w-full h-px bg-slate-900 mb-1 mx-auto max-w-[220px]" />
+                    <p className="font-black text-slate-900">NAMA: ...........................................</p>
+                    <p className="text-[10pt] font-bold text-slate-900">NIP. ...........................................</p>
+                  </td>
+                  <td className="border-none w-1/2 align-top text-center px-4">
+                    <p className="mb-1 text-slate-900 text-[10pt] italic">Purbalingga, {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                    <p className="text-[10pt] font-black uppercase text-indigo-600 mb-10">Guru Kelas / Mata Pelajaran</p>
+                    <div className="h-20" />
+                    <div className="w-full h-px bg-indigo-600 mb-1 mx-auto max-w-[220px]" />
+                    <p className="font-black text-indigo-700 underline decoration-indigo-600 decoration-2 underline-offset-4">{data.nama}</p>
+                    <p className="text-[10pt] font-bold text-slate-900">NIP. ...........................................</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
